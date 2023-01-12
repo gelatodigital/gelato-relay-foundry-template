@@ -9,14 +9,21 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "fork": "ts-node helpers/fork.ts"
+    "fork": "ts-node helpers/fork.ts",
+    "deploy": "ts-node helpers/deploy.ts",
+    "callSyncFee":"ts-node examples-sdk/callSyncFee.ts",
+    "typechain": "typechain --target ethers-v5 'out/**/!(*.t|test).sol/!(*.abi).json' --out-dir typechain-types"
   },
   "author": "donoso.etc",
   "license": "ISC",
   "dependencies": {
+    "@gelatonetwork/relay-sdk": "^3.1.0",
+    "@typechain/ethers-v5": "^10.2.0",
     "@types/node": "^18.11.9",
     "dotenv": "^16.0.3",
+    "ethers": "^5.7.2",
     "ts-node": "^10.9.1",
+    "typechain": "^8.1.1",
     "typescript": "^4.8.4"
   }
 }

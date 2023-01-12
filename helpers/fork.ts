@@ -10,7 +10,7 @@ const forkChain = async () => {
 
     let params = ["-f",RPC]
 
-    let blockNumber=7850256;
+    let blockNumber=8298503;
 
     if (blockNumber)  {
          params.push(`--fork-block-number=${blockNumber}`)

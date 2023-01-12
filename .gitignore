@@ -10,4 +10,6 @@ out/
 # Dotenv file
 .env
 
-/node_moduless
+/node_modules
+
+/typechain-types

@@ -1,14 +1,17 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-export const deploy = async (contract:string) => {
-    let priv_key =  process.env['PRIV_KEY'];
+export const deploy = async () => {
+    let priv_key =  process.env['PRIVATE_KEY'];
 
 
     const { spawn } = await import("child_process");
 
-    let contractPath = 'src/Counter.sol:Counter';
-    let params = ['create',contractPath];
+    let rpc = 'http://127.0.0.1:8545'
+    rpc ='https://goerli.infura.io/v3/1e43f3d31eea4244bf25ed4c13bfde0e'; //testnet rpc
+
+    let deployScriptPath = 'script/Deploy.s.sol:DeployScript ';
+    let params = ['script',deployScriptPath,`--rpc-url=${rpc}`,'--broadcast'];
 
     if (priv_key) params.push(`--private-key=${priv_key}`)
 
@@ -36,6 +39,5 @@ export const deploy = async (contract:string) => {
 
 }
 
-//check();
+deploy();
 
-// anvil --fork-block-number 7850256 -f https://goerli.infura.io/v3/1e43f3d31eea4244bf25ed4c13bfde0e
