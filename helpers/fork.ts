@@ -1,17 +1,28 @@
+
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-export const deploy = async (contract:string) => {
-    let priv_key =  process.env['PRIV_KEY'];
-    console.log(priv_key);
-
+const forkChain = async () => {
+ 
     const { spawn } = await import("child_process");
-    const childProcess = spawn('forge', ['create','src/Counter.sol:Counter',`--private-key=${priv_key}`], {
+
+    const RPC = process.env['RPC']!
+
+    let params = ["-f",RPC]
+
+    let blockNumber=7850256;
+
+    if (blockNumber)  {
+         params.push(`--fork-block-number=${blockNumber}`)
+    }
+
+    /// You can add as much customs params as wanted
+
+    const childProcess = spawn('anvil',params, {
         stdio: "inherit",
       });
     
-
-    childProcess.once("close", (status) => {
+      childProcess.once("close", (status) => {
         childProcess.removeAllListeners("error");
   
         if (status === 0) {
@@ -19,8 +30,6 @@ export const deploy = async (contract:string) => {
         } else {
             console.log('error')
         }
-        
-
 
       });
   
@@ -28,9 +37,6 @@ export const deploy = async (contract:string) => {
         childProcess.removeAllListeners("close");
         console.log('error')
       });
-
 }
 
-//check();
-
-// anvil --fork-block-number 7850256 -f https://goerli.infura.io/v3/1e43f3d31eea4244bf25ed4c13bfde0e
+forkChain()
