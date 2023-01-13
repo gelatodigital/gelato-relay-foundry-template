@@ -14,9 +14,9 @@ The command `forge init` would scaffold a new foundry project, we have inlcuded 
 
 So let's go ahead:
 
-`git clone https://book.getfoundry.sh/getting-started/installation`
+`git clone https://github.com/donoso-eth/gelato-foundry-relay-template`
 
-`cd sadad`
+`cd gelato-foundry-relay-template`
 
 `yarn`
 
@@ -27,15 +27,89 @@ When starting with foundry sometimes is difficult to remember the diferent commn
 
 ## Gelato Relay sdk
 
+
+| Gelato Auth | Payment              | Inheriting Contract            | SDK/API method                |
+| ----------- | -------------------- | ------------------------------ | ----------------------------- |
+| no          | User                 | GelatoRelayContext             | relayWithSyncFee              |
+| yes         | User                 | GelatoRelayContextERC2771      | relayWithSyncFeeERC2771       |
+| no¹        | User fixing gasLimit | GelatoRelayFeeCollector        | relayWithSyncFee              |
+| yes¹       | User fixing gasLimit | GelatoRelayFeeCollectorERC2771 | relayWithSyncFeeERC2771       |
+| no          | 1Balance             | n. a.                          | relayWithSponsoredCall        |
+| yes²       | 1Balance             | ERC2771Context                 | relayWithSponsoredCallERC2771 |
+
+1. The “FeeCollector” contracts allow us to fine tune the gas limit for the transaction, more [info](https://docs.gelato.network/developer-services/relay/quick-start/relaywithsyncfee/relay-context-contracts#gelatorelayfeecollector).
+2. A SponsorKey is required; visit Gelato 1Balance [here](https://relay.gelato.network/)
+
+
+
 ### callSyncFee
-https://goerli.etherscan.io/address/0xaacd421be196dbe6dc4e7c71d374dbb579537593#readContract
+
+Contrat code in [https://github.com/donoso-eth/gelato-foundry-relay-template/blob/main/src/CounterSyncFee.sol](https://github.com/donoso-eth/gelato-foundry-relay-template/blob/main/src/CounterSyncFee.sol)
+
+Contract verified at [https://goerli.etherscan.io/address/0xaacd421be196dbe6dc4e7c71d374dbb579537593#readContract](https://goerli.etherscan.io/address/0xaacd421be196dbe6dc4e7c71d374dbb579537593#readContract)
+
+**SDK Implementation**
 
 
-https://goerli.etherscan.io/address/0x3d19febff443c6c2268574f7c2e02124bdfdf263
+```ts
+  const { data } = await counterSyncFe.populateTransaction.setNumber(4);
+
+  // populate the relay SDK request body 
+  const request = {
+    chainId: 5, // Goerli in this case
+    target: addressCallSyncFee, // target contract address
+    data: data!, // encoded transaction datas
+    isRelayContext: true, // are we using context contracts
+    feeToken: feeToken, // token to pay the relayer
+  };
+
+  // send relayRequest to Gelato Relay API 
+
+  const relayResponse = await relay.callWithSyncFee(request);
+  let taskId = relayResponse.taskId;
+  ```
+
+### callSynFeeCollector
+
+Contrat code in [https://github.com/donoso-eth/gelato-foundry-relay-template/blob/main/src/CounterSyncFeeCollector.sol](https://github.com/donoso-eth/gelato-foundry-relay-template/blob/main/src/CounterSyncFeeCollector.sol)
+
+Contract verified at [https://goerli.etherscan.io/address/0x3d19febff443c6c2268574f7c2e02124bdfdf263](https://goerli.etherscan.io/address/0x3d19febff443c6c2268574f7c2e02124bdfdf263)
+
+**SDK Implementation**
+
+```ts
+ const { data } = await counterSyncFeCollector.populateTransaction.setNumber(7,estimatedFee);
+
+  // populate the relay SDK request body 
+  const request = {
+    chainId: 5, // Goerli in this case
+    target: addressCallSyncFeeCollector, // target contract address
+    data: data!, // encoded transaction datas
+    isRelayContext: true, // are we using context contracts
+    feeToken: feeToken, // token to pay the relayer
+  };
+
+  // send relayRequest to Gelato Relay API
+
+  const relayResponse = await relay.callWithSyncFee(request);
+  let taskId = relayResponse.taskId;
+  ```
+
+### sponsoredCall
 
 
- https://goerli.etherscan.io/address/0xd11decb96f0fcb8f92c0ed146dce8fb726d1c676
+Contrat code in [https://github.com/donoso-eth/gelato-foundry-relay-template/blob/main/src/CounterSponsored.sol](https://github.com/donoso-eth/gelato-foundry-relay-template/blob/main/src/CounterSponsored.sol)
 
-```forge install gelatodigital/relay-context-contracts```
+Contract verified at [https://goerli.etherscan.io/address/0xe486ea0bc6b7e21cf56c3e55895830a512625b35](https://goerli.etherscan.io/address/0xe486ea0bc6b7e21cf56c3e55895830a512625b35)  
 
-https://goerli.etherscan.io/address/0xe486ea0bc6b7e21cf56c3e55895830a512625b35
+  &nbsp; 
+
+### sponsoredCallERC2771
+
+Contrat code in [https://github.com/donoso-eth/gelato-foundry-relay-template/blob/main/src/CounterSponsoredERC2771.sol](https://github.com/donoso-eth/gelato-foundry-relay-template/blob/main/src/CounterSponsoredERC2771.sol)
+
+Contract verified at [ https://goerli.etherscan.io/address/0xd11decb96f0fcb8f92c0ed146dce8fb726d1c676](https://goerli.etherscan.io/address/0xd11decb96f0fcb8f92c0ed146dce8fb726d1c676)
+
+
+
+
