@@ -26,7 +26,7 @@ When starting with foundry sometimes is difficult to remember the diferent commn
 
 
 ## Gelato Relay sdk
-
+  &nbsp; 
 
 | Gelato Auth | Payment              | Inheriting Contract            | SDK/API method                |
 | ----------- | -------------------- | ------------------------------ | ----------------------------- |
@@ -41,7 +41,7 @@ When starting with foundry sometimes is difficult to remember the diferent commn
 2. A SponsorKey is required; visit Gelato 1Balance [here](https://relay.gelato.network/)
 
 
-
+  &nbsp; 
 ### callSyncFee
 
 Contrat code in [https://github.com/donoso-eth/gelato-foundry-relay-template/blob/main/src/CounterSyncFee.sol](https://github.com/donoso-eth/gelato-foundry-relay-template/blob/main/src/CounterSyncFee.sol)
