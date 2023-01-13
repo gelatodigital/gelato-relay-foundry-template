@@ -12,7 +12,6 @@ contract CounterSyncFee is GelatoRelayContext {
     number = newNumber;
     _transferRelayFee();
   }
-    receive() external payable{
 
-  }
+  receive() external payable { }
 }

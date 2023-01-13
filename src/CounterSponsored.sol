@@ -5,7 +5,7 @@ import "forge-std/console.sol";
 
 import { ERC2771Context } from "@gelatonetwork/relay-context/contracts/vendor/ERC2771Context.sol";
 
-contract CounterSyncFee {
+contract CounterSponsored {
   uint256 public number;
   address public trustedForwarder;
 

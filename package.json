@@ -12,6 +12,8 @@
     "fork": "ts-node helpers/fork.ts",
     "deploy": "ts-node helpers/deploy.ts",
     "callSyncFee":"ts-node examples-sdk/callSyncFee.ts",
+    "callSyncFeeCollector":"ts-node examples-sdk/callSyncFeecollector.ts",
+    "sponsoredCall":"ts-node examples-sdk/sponsoredCall.ts",
     "typechain": "typechain --target ethers-v5 'out/**/!(*.t|test).sol/!(*.abi).json' --out-dir typechain-types"
   },
   "author": "donoso.etc",

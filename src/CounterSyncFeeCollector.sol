@@ -15,15 +15,10 @@ contract CounterSyncFeeCollector is GelatoRelayFeeCollector {
 
   address immutable NATIVE_TOKEN = address(0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE);
 
-  function setNumber(uint256 newNumber) external onlyGelatoRelay {
+  function setNumber(uint256 newNumber, uint256 fee) external onlyGelatoRelay {
     number = newNumber;
     address feeCollector = _getFeeCollector();
     address nativeToken = address(0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE);
-    // Hardcoding the fee to 100 wei - NOTE: this is just for example
-    // If you do not pay enough to feeCollector,
-    // your relay request will not go through
-    // In reality, you should pass in user signatures TODO
-    uint256 fee = 100;
 
     // Payment to Gelato
     // NOTE: be very careful here!
@@ -37,4 +32,6 @@ contract CounterSyncFeeCollector is GelatoRelayFeeCollector {
     if (_amount == 0) return;
     _token == NATIVE_TOKEN ? Address.sendValue(payable(_to), _amount) : IERC20(_token).safeTransfer(_to, _amount);
   }
+
+  receive() external payable { }
 }

@@ -15,6 +15,4 @@ contract CounterSyncFeeTest is Test {
     vm.expectRevert("onlyGelatoRelay");
     counterSyncFee.setNumber(x);
   }
-
-
 }
