@@ -22,7 +22,11 @@ So let's go ahead:
 
 
 ### forge? vs helpers
-When starting with foundry sometimes is difficult to remember the diferent commnads and parameters, therefore we have created a set of scripts to ease the foundry onboarding
+When starting with foundry sometimes is difficult to remember the diferent commnads and parameters, therefore we have created a set of scripts to ease the foundry onboarding.
+
+There are three main commands in `forge`, `cast` and `anvil`. We don't use `cast` in this repo, it is used to query the blockchaoin. `anvil` is used to spin a local blockchain node like hardhat.
+
+`anvil 
 
 
 ## Gelato Relay sdk
@@ -32,13 +36,11 @@ When starting with foundry sometimes is difficult to remember the diferent commn
 | ----------- | -------------------- | ------------------------------ | ----------------------------- |
 | no          | User                 | GelatoRelayContext             | relayWithSyncFee              |
 | yes         | User                 | GelatoRelayContextERC2771      | relayWithSyncFeeERC2771       |
-| no¹        | User fixing gasLimit | GelatoRelayFeeCollector        | relayWithSyncFee              |
-| yes¹       | User fixing gasLimit | GelatoRelayFeeCollectorERC2771 | relayWithSyncFeeERC2771       |
 | no          | 1Balance             | n. a.                          | relayWithSponsoredCall        |
-| yes²       | 1Balance             | ERC2771Context                 | relayWithSponsoredCallERC2771 |
+| yes1       | 1Balance             | ERC2771Context                 | relayWithSponsoredCallERC2771 |
 
-1. The “FeeCollector” contracts allow us to fine tune the gas limit for the transaction, more [info](https://docs.gelato.network/developer-services/relay/quick-start/relaywithsyncfee/relay-context-contracts#gelatorelayfeecollector).
-2. A SponsorKey is required; visit Gelato 1Balance [here](https://relay.gelato.network/)
+relay-context-contracts#gelatorelayfeecollector).
+1. A SponsorKey is required; visit Gelato 1Balance [here](https://relay.gelato.network/)
 
 
   &nbsp; 
@@ -69,36 +71,13 @@ Contract verified at [https://goerli.etherscan.io/address/0xaacd421be196dbe6dc4e
   let taskId = relayResponse.taskId;
   ```
 
-### callSynFeeCollector
-
-Contrat code in [https://github.com/donoso-eth/gelato-foundry-relay-template/blob/main/src/CounterSyncFeeCollector.sol](https://github.com/donoso-eth/gelato-foundry-relay-template/blob/main/src/CounterSyncFeeCollector.sol)
-
-Contract verified at [https://goerli.etherscan.io/address/0x3d19febff443c6c2268574f7c2e02124bdfdf263](https://goerli.etherscan.io/address/0x3d19febff443c6c2268574f7c2e02124bdfdf263)
-
-**SDK Implementation**
-
-```ts
- const { data } = await counterSyncFeCollector.populateTransaction.setNumber(7,estimatedFee);
-
-  // populate the relay SDK request body 
-  const request = {
-    chainId: 5, // Goerli in this case
-    target: addressCallSyncFeeCollector, // target contract address
-    data: data!, // encoded transaction datas
-    isRelayContext: true, // are we using context contracts
-    feeToken: feeToken, // token to pay the relayer
-  };
-
-  // send relayRequest to Gelato Relay API
-
-  const relayResponse = await relay.callWithSyncFee(request);
-  let taskId = relayResponse.taskId;
-  ```
 
 ### sponsoredCall
 
 
 Contrat code in [https://github.com/donoso-eth/gelato-foundry-relay-template/blob/main/src/CounterSponsored.sol](https://github.com/donoso-eth/gelato-foundry-relay-template/blob/main/src/CounterSponsored.sol)
+
+
 
 Contract verified at [https://goerli.etherscan.io/address/0xe486ea0bc6b7e21cf56c3e55895830a512625b35](https://goerli.etherscan.io/address/0xe486ea0bc6b7e21cf56c3e55895830a512625b35)  
 

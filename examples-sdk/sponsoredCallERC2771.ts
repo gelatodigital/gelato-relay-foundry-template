@@ -44,7 +44,7 @@ const sponsoredCallERC2771= async () => {
 
   const relayResponse = await relay.sponsoredCallERC2771(
     request,
-    new ethers.providers.Web3Provider(ethereum),
+    signer as providers.Web3Provider, // new providers.Web3Provider(provider),
     sponsorApiKey
   );
   let taskId = relayResponse.taskId;
