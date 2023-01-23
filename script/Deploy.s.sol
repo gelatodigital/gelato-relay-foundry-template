@@ -4,14 +4,12 @@ pragma solidity ^0.8.13;
 import "forge-std/Script.sol";
 
 import { CounterSyncFee } from "../src/CounterSyncFee.sol";
-import { CounterSyncFeeCollector } from "../src/CounterSyncFeeCollector.sol";
 import { CounterSponsoredERC2771 } from "../src/CounterSponsoredERC2771.sol";
 import { CounterSponsored } from "../src/CounterSponsored.sol";
 
 contract DeployScript is Script {
   CounterSyncFee counterSyncFee;
-  CounterSyncFeeCollector counterSyncFeeCollector;
-  CounterSponsoredERC2771 counterSponsoredERC2771;
+   CounterSponsoredERC2771 counterSponsoredERC2771;
   CounterSponsored counterSponsored;
 
   function setUp() public { }
@@ -22,9 +20,6 @@ contract DeployScript is Script {
     
     counterSyncFee = new CounterSyncFee();
     payable(address(counterSyncFee)).transfer(0.01 ether);
-
-    counterSyncFeeCollector = new CounterSyncFeeCollector();
-    payable(address(counterSyncFeeCollector)).transfer(0.01 ether);
 
     counterSponsoredERC2771 = new CounterSponsoredERC2771();
 
